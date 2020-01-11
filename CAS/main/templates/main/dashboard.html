@@ -1,0 +1,39 @@
+{% extends 'main/header.html' %}
+
+{% block content %}	
+<div class="row">
+    {% for c in courses %}
+    <div class="col s12 m6">
+      <div class="card blue-grey darken-1">
+        <div class="card-content white-text">
+          <span class="card-title">{{c.course_title}}</span>
+          <p>{{c.course_semester}}</p>
+          <p>{{c.date}}</p>
+
+          
+        </div>
+        <div class="card-action">
+          <a href="#">Visit</a>
+          
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  
+  {% endblock %}
+
+
+
+    {{variable}}
+
+    {% for c in Courses %}
+
+    {{c.course_title}}
+    {{c.course_tutor}}
+    {{c.date}}
+
+    {% endfor %}
+</body>
+</html>
+
