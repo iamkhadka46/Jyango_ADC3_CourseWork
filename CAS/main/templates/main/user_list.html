@@ -1,6 +1,9 @@
 
-{% extends 'main/base.html' %}
+{% extends 'main/header.html' %}
 {% block content %}
+
+<h2> Search User </h2>
+<br/>
   <form method="get">
     {{ filter.form.as_p }}
     <button type="submit">Search</button>
