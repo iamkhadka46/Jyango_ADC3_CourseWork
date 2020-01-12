@@ -19,7 +19,13 @@ urlpatterns = [
     path('search/', views.search, name = "search"),
     path('assignments/', views.assignment_list, name = "assignment_list"),
     path('assignments/upload/', views.upload_assignment, name = "upload_assignment"),
-    path('assignments/<int:pk>/', views.delete_book, name='delete_assignment'),
+    path('assignments/<int:pk>/', views.delete_assignment, name='delete_assignment'),
+    path('course', views.course),  
+    path('show',views.show),  
+    path('edit/<int:id>', views.edit),  
+    path('update/<int:id>', views.update),  
+    path('delete/<int:id>', views.destroy),  
+
 ]
 
 if settings.DEBUG:

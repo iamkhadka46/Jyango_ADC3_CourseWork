@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.shortcuts import render, redirect
-from . forms import RegisterForm, AssignmentForm
+from . forms import RegisterForm, AssignmentForm, CourseForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Course, User, UploadFile
@@ -101,8 +101,39 @@ def upload_assignment(request):
         'form': form
     })
 
-def delete_book(request, pk):
+def delete_assignment(request, pk):
     if request.method == 'POST':
         assignment = UploadFile.objects.get(pk=pk)
         assignment.delete()
     return redirect('main:assignment_list')
+
+
+def course(request):  
+    if request.method == "POST":  
+        form = CourseForm(request.POST)  
+        if form.is_valid():  
+            try:  
+                form.save()  
+                return redirect('/show')  
+            except:  
+                pass  
+    else:  
+        form = CourseForm()  
+    return render(request,'main/course_list.html',{'form':form})  
+def show(request):  
+    courses = Course.objects.all()  
+    return render(request,"main/show.html",{'courses':courses})  
+def edit(request, id):  
+    course = Course.objects.get(id=id)  
+    return render(request,'main/edit.html', {'course':course})  
+def update(request, id):  
+    course = Course.objects.get(id=id)  
+    form = CourseForm(request.POST, instance = course)  
+    if form.is_valid():  
+        form.save()  
+        return redirect("/show")  
+    return render(request, 'main/edit.html', {'course':course})  
+def destroy(request, id):  
+    course = Course.objects.get(id=id)  
+    course.delete()  
+    return redirect("/show")  

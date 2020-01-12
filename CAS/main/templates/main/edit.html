@@ -1,0 +1,47 @@
+    <!DOCTYPE html>  
+    <html lang="en">  
+    <head>  
+        <meta charset="UTF-8">  
+        <title>Index</title>  
+        {% load staticfiles %}  
+        <link rel="stylesheet" href="{% static 'css/course/style_course.css' %}"/>  
+    </head>  
+    <body>  
+    <form method="POST" class="post-form" action="/update/{{course.id}}">  
+            {% csrf_token %}  
+        <div class="container">  
+    <br>  
+        <div class="form-group row">  
+        <label class="col-sm-1 col-form-label"></label>  
+        <div class="col-sm-4">  
+        <h3>Update Details</h3>  
+        </div>  
+      </div>  
+        <div class="form-group row">  
+        <label class="col-sm-2 col-form-label">Course Title:</label>  
+        <div class="col-sm-4">  
+            <input type="text" name="course_title" id="id_course_title" required maxlength="20" value="{{ course.course_title }}"/>  
+        </div>  
+      </div>  
+      <div class="form-group row">  
+        <label class="col-sm-2 col-form-label">Course Semester:</label>  
+        <div class="col-sm-4">  
+            <input type="text" name="course_semester" id="id_course_semester" required maxlength="100" value="{{ course.course_semester }}" />  
+        </div>  
+      </div>  
+        <div class="form-group row">  
+        <label class="col-sm-2 col-form-label">Date Added:</label>  
+        <div class="col-sm-4">  
+            <input type="date" name="date" id="id_date required maxlength="254" value="{{ course.date }}" />  
+        </div>  
+      </div>   
+        <div class="form-group row">  
+        <label class="col-sm-1 col-form-label"></label>  
+        <div class="col-sm-4">  
+        <button type="submit" class="btn btn-success">Update</button>  
+        </div>  
+      </div>  
+        </div>  
+    </form>  
+    </body>  
+    </html>  
