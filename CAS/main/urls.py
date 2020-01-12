@@ -19,7 +19,7 @@ urlpatterns = [
     path('search/', views.search, name = "search"),
     path('assignments/', views.assignment_list, name = "assignment_list"),
     path('assignments/upload/', views.upload_assignment, name = "upload_assignment"),
-
+    path('assignments/<int:pk>/', views.delete_book, name='delete_assignment'),
 ]
 
 if settings.DEBUG:

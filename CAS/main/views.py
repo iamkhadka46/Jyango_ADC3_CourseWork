@@ -100,3 +100,9 @@ def upload_assignment(request):
     return render(request, 'main/upload_assignment.html', {
         'form': form
     })
+
+def delete_book(request, pk):
+    if request.method == 'POST':
+        assignment = UploadFile.objects.get(pk=pk)
+        assignment.delete()
+    return redirect('main:assignment_list')

@@ -15,6 +15,7 @@
         <th>Assigment Title</th>
         <th>Course</th>
         <th>Download</th>
+        <th>Delete</th>
       </tr>
     </thead>
     <tbody>
@@ -27,7 +28,13 @@
               Download File
             </a>
           </td>
-
+          <td>
+          <form method="post" action="{% url 'main:delete_assignment' f.pk %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+            </form>
+          </td>
+        </tr>
       {% endfor %}
     </tbody>
   </table>
