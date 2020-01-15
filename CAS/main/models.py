@@ -1,7 +1,8 @@
 
 from django.contrib.auth.models import User, AbstractUser
 from django.db import models
-
+from datetime import datetime
+from django.urls import reverse
 
 # Create your models here.
 class User(AbstractUser):
@@ -12,7 +13,7 @@ class User(AbstractUser):
 class Course(models.Model):
     course_title = models.CharField(max_length=200)
     course_semester = models.CharField(max_length=200)
-    date = models.DateTimeField("date published")
+    date = models.DateTimeField(default=datetime.now, blank=True)
 
     def __str__(self):
         return self.course_title
@@ -38,6 +39,9 @@ class Post(models.Model):
     content = models.TextField()
     course = models.ForeignKey(Course, on_delete = models.CASCADE)
     teacher = models.ForeignKey(Teacher, on_delete = models.CASCADE)
+    date_posted = models.DateTimeField(default=datetime.now, blank=True)
+    def get_absolute_url(self):
+        return reverse('post:post-detail', kwargs={'pk': self.pk})
 
     def __str__(self):
         return self.title
@@ -64,7 +68,7 @@ class Submission(models.Model):
 
     def __str__(self):
         return self.post.title
-        
+
 class UploadFile(models.Model):
     title = models.CharField(max_length=100)
     courses = models.CharField(max_length=100)

@@ -63,12 +63,23 @@
                     </div>
 
                     <div id="navbar" class="navbar-collapse collapse">
+                    <a href="#" class="brand-logo">Welcome {{user.username}}</a>
                         <ul class="nav navbar-nav navbar-right">
                             <li><a href="/">Home</a></li>
-                            <li><a href="/signup">Register</a></li>
-                            <li><a href="/login">Log In</a></li>
-                            <li><a href="page-contact.html">Contact</a></li>
-                            <li><a href="https://heraldcollege.edu.np/">Herald College</a></li>
+        {% if user.is_authenticated %}
+                <li><a href="{% url 'post:post-home' %}">Posts</a></li>
+                <li><a href="{% url 'post:post-create' %}">New Post</a></li>
+                <li><a href="/search">Search User</a></li>
+                <li><a href="/show">Add Courses</a></li>
+                <li><a href="/assignments">Add Assignment</a></li>
+                <li><a href="{% url 'main:logout' %}">Log Out</a></li>
+              
+        {% else %}
+           
+                <li><a href="/login">Login</a></li>
+                <li><a href="/signup">Register</a></li>
+                 {% endif %}
+        <li><a href="https://heraldcollege.edu.np/">Herald</a></li>
                             
             
                         </ul>
