@@ -82,12 +82,34 @@ def search(request):
     return render(request, 'main/user_list.html', {'filter': user_filter})
 
 
+def search(request):
+    user_list = User.objects.all()
+    user_filter = UserFilter(request.GET, queryset=user_list)
+    return render(request, 'main/user_list.html', {'filter': user_filter})
+
+
 def assignment_list(request):
     assignments = UploadFile.objects.all()
+    if request.GET:
+        query = request.GET['q']
+        assignments = get_data_queryset(str(query))
     return render(request, 'main/assignment_list.html', {
         'assignments': assignments
     })
 
+def get_data_queryset(query = None):
+    queryset = []
+    queries = query.split(" ")
+    for q in queries:
+        assignments = UploadFile.objects.filter(
+            Q(title__icontains=q) |
+            Q(courses__icontains=q)
+        )
+
+        for assignment in assignments:
+            queryset.append(assignment)
+
+    return list(set(queryset))
 
 def upload_assignment(request):
     if request.method == 'POST':
