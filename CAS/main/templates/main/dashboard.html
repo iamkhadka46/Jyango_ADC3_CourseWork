@@ -1,4 +1,4 @@
-{% extends 'main/base.html' %}
+{% include 'main/base.html' %}
 
 {% block content %}	
 <div class="row">
@@ -13,7 +13,7 @@
           
         </div>
         <div class="card-action">
-          <a href="/course/<int:pk>">Visit</a>
+          <a href="{% url 'post:post-home' %}">Visit</a>
           
         </div>
       </div>

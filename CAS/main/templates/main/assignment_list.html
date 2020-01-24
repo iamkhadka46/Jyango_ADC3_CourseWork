@@ -1,4 +1,4 @@
-{% extends 'main/header.html' %}
+{% extends 'main/base.html' %}
 
 {% block content %}
 
@@ -10,6 +10,12 @@
     </p>
   {% endblock %}
 
+<form method ="get" class = "search-bar">
+
+<input type= "text" name = 'q' placeholder = "Search.."  value='{{query}}'>
+
+</form>
+
   <table class="table mb-0">
     <thead>
       <tr>
@@ -19,6 +25,7 @@
         <th>Delete</th>
       </tr>
     </thead>
+    {% if assignments %}
     <tbody>
       {% for f in assignments %}
         <tr>
@@ -38,5 +45,6 @@
         </tr>
       {% endfor %}
     </tbody>
+    {% endif %}
   </table>
 {% endblock %}

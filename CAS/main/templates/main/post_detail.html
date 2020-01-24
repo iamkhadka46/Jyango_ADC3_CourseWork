@@ -1,7 +1,7 @@
-{% extends "main/base.html" %}
+{% include "main/base.html" %}
 {% block content %}
   <article class="media content-section">
-    <img class="rounded-circle article-img" src="{{ object.author.profile.image.url }}">
+    
     <div class="media-body">
       <div class="article-metadata">
         <a class="mr-2" href="#">{{ object.teacher }}</a>
@@ -15,6 +15,14 @@
       </div>
       <h2 class="article-title">{{ object.title }}</h2>
       <p class="article-content">{{ object.content }}</p>
+      <tbody>
+          <td>
+            <a href="/assignments/upload/" class="btn btn-primary btn-sm" target="_blank">
+              Submit Assignment
+            </a>
+          </td>
+    <tbody>
     </div>
   </article>
+
 {% endblock content %}

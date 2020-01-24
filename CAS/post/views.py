@@ -12,30 +12,28 @@ from main.models import Post, User, Teacher
 
 def home(request):
     context = {
-        'posts': Post.objects.all()
+        'posts': Post.objects.all() 
     }
     return render(request, 'Post/home.html', context)
 
 
-class PostListView(ListView):
+class PostListView(ListView): #using generic class based view
+    model = Post 
+    template_name = 'post/home.html'  
+    context_object_name = 'posts' #objects from model Post saved in self.object_list
+    ordering = ['-date_posted'] #ordering by latest date first
+
+
+class PostDetailView(DetailView): #displays the object using primary key by saving in self.object
     model = Post
-    template_name = 'post/home.html'  # <app>/<model>_<viewtype>.html
-    context_object_name = 'posts'
-    ordering = ['-date_posted']
 
 
-class PostDetailView(DetailView):
+class PostCreateView(LoginRequiredMixin, CreateView): #accessing self.object to create new objects for Post model. 
     model = Post
+    fields = ['title', 'content', 'course', 'teacher'] #loginrequredmixin has the same function as @loginrequired
 
 
-class PostCreateView(LoginRequiredMixin, CreateView):
-    model = Post
-    fields = ['title', 'content', 'course', 'teacher']
-
-    
-
-
-class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView): #yet to implement
     model = Post
     fields = ['title', 'content', 'course']
 
@@ -50,7 +48,7 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return False
 
 
-class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):#yet to implement
     model = Post
     success_url = '/'
 
@@ -60,6 +58,3 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             return True
         return False
 
-
-def about(request):
-    return render(request, 'blog/about.html', {'title': 'About'})

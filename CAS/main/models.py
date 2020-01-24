@@ -52,10 +52,9 @@ class Assignment(models.Model):
     assign_file = models.FileField(upload_to='Assignments/')
     course = models.ForeignKey(Course, on_delete = models.CASCADE)
     teacher = models.ForeignKey(Teacher, on_delete = models.CASCADE)
-    post = models.OneToOneField(Post, on_delete = models.CASCADE, primary_key = True)
+    #post = models.OneToOneField(Post, on_delete = models.CASCADE, primary_key = True)
 
-    def __str__(self):
-        return self.post.title
+   
 
 
 

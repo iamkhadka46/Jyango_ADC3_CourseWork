@@ -30,7 +30,7 @@ class RegisterForm(UserCreationForm):
 class AssignmentForm(forms.ModelForm):
     class Meta:
         model = UploadFile
-        fields = ('title', 'courses', 'file',)
+        fields = "__all__" 
 
  
 class CourseForm(forms.ModelForm):  
