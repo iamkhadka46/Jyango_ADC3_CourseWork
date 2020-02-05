@@ -112,7 +112,7 @@ def upload_assignment(request):
         'form': form
     })
 
-def delete_assignment(request, pk): #calling object py primary key.(slug method)
+def delete_assignment(request, pk): #calling object by primary key.(slug method)
     if request.method == 'POST':
         assignment = UploadFile.objects.get(pk=pk)
         assignment.delete()
