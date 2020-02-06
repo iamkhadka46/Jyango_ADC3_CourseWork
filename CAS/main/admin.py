@@ -9,4 +9,4 @@ admin.site.register(Teacher)
 admin.site.register(Assignment)
 admin.site.register(Submission)
 admin.site.register(UploadFile)
-admin.site.register(User, UserAdmin)
+

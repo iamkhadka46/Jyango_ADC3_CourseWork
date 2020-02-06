@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User, AbstractUser
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from .models import User, Assignment, UploadFile, Course
+from .models import *
 
 class CustomUserCreationForm(UserCreationForm):
 
@@ -29,10 +29,14 @@ class RegisterForm(UserCreationForm):
    
 class AssignmentForm(forms.ModelForm):
     class Meta:
-        model = UploadFile
+        model = Assignment
         fields = "__all__" 
 
- 
+class SubmissionForm(forms.ModelForm):
+    class Meta:
+        model = Submission
+        fields = "__all__" 
+
 class CourseForm(forms.ModelForm):  
     class Meta:  
         model = Course  

@@ -23,7 +23,7 @@
 <body>
   <nav>
     <div class="nav-wrapper">
-      <a href="/" class="brand-logo">Hello {{user.username}}</a>
+      <a href="/" class="brand-logo">Hello {{user.first_name}}</a>
       <ul id="nav-mobile" class="right hide-on-med-and-down">
         <li><a href="/">Home</a></li>
         {% if user.is_authenticated %}
@@ -33,7 +33,8 @@
                 
                 <li><a href="/search">Search User</a></li>
                 <li><a href="/show">Add Courses</a></li>
-                <li><a href="/assignments">Add Assignment</a></li>
+                <li><a href="/assignments">Assignments</a></li>
+                <li><a href="/submissions">Submissions</a></li>
                 <li><a href="{% url 'main:logout' %}">Log Out</a></li>
                 
               

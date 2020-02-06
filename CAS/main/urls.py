@@ -19,11 +19,15 @@ urlpatterns = [
     path('assignments/', views.assignment_list, name = "assignment_list"),
     path('assignments/upload/', views.upload_assignment, name = "upload_assignment"),
     path('assignments/<int:pk>/', views.delete_assignment, name='delete_assignment'),
+    path('submissions/', views.submission_list, name = "submission_list"),
+    path('submissions/upload/', views.upload_submission, name = "upload_submission"),
+    path('submissions/<int:pk>/', views.delete_submission, name='delete_submission'),
     path('course', views.course),  
     path('show',views.show),  
     path('edit/<int:id>', views.edit),  
     path('update/<int:id>', views.update),  
-    path('delete/<int:id>', views.destroy),  
+    path('delete/<int:id>', views.delete),  
+    
 
 ]
 

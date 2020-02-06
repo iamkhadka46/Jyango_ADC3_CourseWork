@@ -3,10 +3,10 @@
 {% block content %}
 
   {% block content_header %}
-    <h2>Assignments</h2>
+    <h2>Submissions</h2>
     <p>
-      <a href="{% url 'main:upload_assignment' %}
-      " class="btn btn-primary">Upload Assignment</a>
+      <a href="{% url 'main:upload_submission' %}
+      " class="btn btn-primary">Upload your Submission</a>
     </p>
   {% endblock %}
 
@@ -19,27 +19,29 @@
   <table class="table mb-0">
     <thead>
       <tr>
+        <th>Student</th>
         <th>Course</th>
         <th>Teacher</th>
-        <th>Due Date</th>
+        <th>Date Submitted</th>
         <th>Download</th>
         <th>Delete</th>
       </tr>
     </thead>
-    {% if assignments %}
+    {% if submissions %}
     <tbody>
-      {% for f in assignments %}
+      {% for f in submissions %}
         <tr>
+          <td>{{ f.student }}</td>
           <td>{{ f.course }}</td>
           <td>{{ f.teacher }}</td>
-          <td>{{ f.due_date }}</td>
+          <td>{{ f.sub_date }}</td>
           <td>
-            <a href="{{ f.assign_file.url }}" class="btn btn-primary btn-sm" target="_blank">
+            <a href="{{ f.sub_file.url }}" class="btn btn-primary btn-sm" target="_blank">
               Download File
             </a>
           </td>
           <td>
-          <form method="post" action="{% url 'main:delete_assignment' f.pk %}">
+          <form method="post" action="{% url 'main:delete_submission' f.pk %}">
               {% csrf_token %}
               <button type="submit" class="btn btn-danger btn-sm">Delete</button>
             </form>

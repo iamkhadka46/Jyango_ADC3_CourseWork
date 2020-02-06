@@ -2,18 +2,20 @@
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.shortcuts import render, redirect
-from . forms import RegisterForm, AssignmentForm, CourseForm
+from . forms import *
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages #to display messages in admin panel
-from .models import Course, User, UploadFile
+from .models import Course, User, UploadFile, Assignment
 from django.contrib.auth import get_user_model
 from django.views.generic import TemplateView, ListView
 from django.db.models import Q
 from .filters import UserFilter
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Group
+from .decorators import unauthenticated_user, admin_only, allowed_users
 
 
-User = get_user_model()
 
 def home_view(request):
     return render(request, 'main/home.html')
@@ -78,7 +80,7 @@ def search(request):
 
 
 def assignment_list(request):
-    assignments = UploadFile.objects.all()
+    assignments = Assignment.objects.all()
     if request.GET:
         query = request.GET['q'] #for search query
         assignments = get_data_queryset(str(query)) 
@@ -90,9 +92,9 @@ def get_data_queryset(query = None):
     queryset = []
     queries = query.split(" ")
     for q in queries:
-        assignments = UploadFile.objects.filter(
-            Q(title__icontains=q) |
-            Q(courses__icontains=q)  #using 'or' to add course to the query
+        assignments = Assignment.objects.filter(
+            Q(course__icontains=q) |
+            Q(teacher__icontains=q)  #using 'or' to add course to the query
         )
 
         for assignment in assignments:
@@ -100,6 +102,8 @@ def get_data_queryset(query = None):
 
     return list(set(queryset))
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['Teacher'])
 def upload_assignment(request):
     if request.method == 'POST':
         form = AssignmentForm(request.POST, request.FILES)
@@ -112,13 +116,45 @@ def upload_assignment(request):
         'form': form
     })
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['Teacher'])
 def delete_assignment(request, pk): #calling object by primary key.(slug method)
     if request.method == 'POST':
-        assignment = UploadFile.objects.get(pk=pk)
+        assignment = Assignment.objects.get(pk=pk)
         assignment.delete()
     return redirect('main:assignment_list')
 
+def submission_list(request):
+    submissions = Submission.objects.all()
+    return render(request, 'main/submission_list.html', {
+        'submissions': submissions
+    })
 
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['Student'])
+def upload_submission(request):
+    if request.method == 'POST':
+        form = SubmissionForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('main:submission_list')
+    else:
+        form = SubmissionForm()
+    return render(request, 'main/upload_submission.html', {
+        'form': form
+    })
+
+@login_required(login_url='login')
+@admin_only
+def delete_submission(request, pk): #calling object by primary key.(slug method)
+    if request.method == 'POST':
+        submission = Submission.objects.get(pk=pk)
+        submission.delete()
+    return redirect('main:submission_list')
+
+@login_required(login_url='login')
+@admin_only
 def course(request):  
     if request.method == "POST":  
         form = CourseForm(request.POST)  
@@ -130,15 +166,22 @@ def course(request):
                 pass  
     else:  
         form = CourseForm()  
-    return render(request,'main/course_list.html',{'form':form})  
+    return render(request,'main/course_list.html',{'form':form}) 
+
+@login_required(login_url='login')
+@admin_only
 def show(request):  
     courses = Course.objects.all()  
     return render(request,"main/show.html",{'courses':courses})  
 
+@login_required(login_url='login')
+@admin_only
 def edit(request, id):  
     course = Course.objects.get(id=id)  
     return render(request,'main/edit.html', {'course':course})  
 
+@login_required(login_url='login')
+@admin_only
 def update(request, id):  
     course = Course.objects.get(id=id)  
     form = CourseForm(request.POST, instance = course)  
@@ -146,8 +189,14 @@ def update(request, id):
         form.save()  
         return redirect("/show")  
     return render(request, 'main/edit.html', {'course':course})  
-    
-def destroy(request, id):  
+
+@login_required(login_url='login')
+@admin_only    
+def delete(request, id):  
     course = Course.objects.get(id=id)  
     course.delete()  
     return redirect("/show")  
+
+
+#@login_required(login_url='login')
+#@allowed_users(allowed_roles=['Teacher']

@@ -5,9 +5,7 @@ from datetime import datetime
 from django.urls import reverse
 
 # Create your models here.
-class User(AbstractUser):
-    is_student = models.BooleanField('student status', default=False)
-    is_teacher = models.BooleanField('teacher status', default=False)
+
 
 
 class Course(models.Model):
@@ -23,22 +21,21 @@ class Teacher(models.Model):
     course = models.ManyToManyField(Course)
 
     def __str__(self):
-        return self.user.first_name
+        return self.user.username
 
 
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     course = models.ManyToManyField(Course)
-    teacher = models.ManyToManyField(Teacher)
 
     def __str__(self):
-        return self.user.first_name
+        return self.user.username
 
 class Post(models.Model):
     title = models.CharField(max_length=100)
     content = models.TextField()
     course = models.ForeignKey(Course, on_delete = models.CASCADE)
-    teacher = models.ForeignKey(Teacher, on_delete = models.CASCADE)
+    teacher = models.ForeignKey(Teacher, on_delete = models.CASCADE, null=True)
     date_posted = models.DateTimeField(default=datetime.now, blank=True)
     def get_absolute_url(self):
         return reverse('post:post-detail', kwargs={'pk': self.pk})
@@ -52,18 +49,16 @@ class Assignment(models.Model):
     assign_file = models.FileField(upload_to='Assignments/')
     course = models.ForeignKey(Course, on_delete = models.CASCADE)
     teacher = models.ForeignKey(Teacher, on_delete = models.CASCADE)
-    #post = models.OneToOneField(Post, on_delete = models.CASCADE, primary_key = True)
-
-   
-
-
+    
+    def __str__(self):
+        return self.due_date
 
 class Submission(models.Model):
     sub_file = models.FileField(upload_to='Submission/')
     sub_date = models.DateField('date submitted')
     course = models.ForeignKey(Course, on_delete = models.CASCADE)
     student = models.ForeignKey(Student, on_delete = models.CASCADE)
-    post = models.OneToOneField(Post, on_delete = models.CASCADE, primary_key = True)
+    teacher = models.ForeignKey(Teacher, on_delete = models.CASCADE, null = True)
 
     def __str__(self):
         return self.post.title
