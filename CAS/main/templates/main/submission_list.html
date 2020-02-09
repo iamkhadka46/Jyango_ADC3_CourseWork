@@ -26,7 +26,9 @@
         <th>Teacher</th>
         <th>Date Submitted</th>
         <th>Download</th>
+        {% if user.is_authenticated and request.user.groups.all.0.name == 'Student' %}
         <th>Delete</th>
+        {% endif %}
       </tr>
     </thead>
     <tbody>
@@ -36,11 +38,13 @@
           <td>{{ f.course }}</td>
           <td>{{ f.teacher }}</td>
           <td>{{ f.sub_date }}</td>
+          {% if user.is_authenticated and request.user == f.student.user or request.user.groups.all.0.name == 'Teacher' %}
           <td>
             <a href="{{ f.sub_file.url }}" class="btn btn-primary btn-sm" target="_blank">
               Download File
             </a>
           </td>
+          {% endif %}
           {% if user.is_authenticated and request.user == f.student.user %}
           <td>
           <form method="post" action="{% url 'main:delete_assignment' f.pk %}">
