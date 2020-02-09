@@ -5,15 +5,16 @@ from django.shortcuts import render, redirect
 from . forms import *
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages #to display messages in admin panel
-from .models import Course, User, UploadFile, Assignment
+from .models import Course, User, UploadFile, Assignment, Post
 from django.contrib.auth import get_user_model
 from django.views.generic import TemplateView, ListView
 from django.db.models import Q
 from .filters import UserFilter
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 from .decorators import unauthenticated_user, admin_only, allowed_users
+import json 
 
 
 
@@ -88,13 +89,27 @@ def assignment_list(request):
         'assignments': assignments
     })
 
+def api_assignments(request,PAGENO,SIZE): # pagination for assignment
+    if request.method == "GET":
+        skip = SIZE * (PAGENO -1)
+        assignments = Assignment.objects.all() [skip:(PAGENO * SIZE)]
+        dict_type = {"assignments": list(assignments.values("assign_file", "course", "course_id", "date", "due_date", "id", "teacher", "teacher_id"))}
+    return JsonResponse(dict_type)
+
+def api_posts(request,PAGENO,SIZE): # pagination for post
+    if request.method == "GET":
+        skip = SIZE * (PAGENO -1)
+        posts = Post.objects.all() [skip:(PAGENO * SIZE)]
+        dict_type = {"posts": list(posts.values("title", "content", "course", "date_posted"))}
+    return JsonResponse(dict_type)
+
 def get_data_queryset(query = None):
     queryset = []
     queries = query.split(" ")
     for q in queries:
         assignments = Assignment.objects.filter(
-            Q(course__icontains=q) |
-            Q(teacher__icontains=q)  #using 'or' to add course to the query
+            Q(course__course_title__icontains=q) |
+            Q(teacher__user__first_name__icontains=q)  #using 'or' to add course to the query
         )
 
         for assignment in assignments:
