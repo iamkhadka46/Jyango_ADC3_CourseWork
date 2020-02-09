@@ -25,3 +25,17 @@ def update_api_data(request, pk):
         course.course_semester = update_data['course_semester']
         course.save()
         return JsonResponse({'message': 'Succesfully Completed'})
+
+def api_assignments(request,PAGENO,SIZE): # pagination for assignment
+    if request.method == "GET":
+        skip = SIZE * (PAGENO -1)
+        assignments = Assignment.objects.all() [skip:(PAGENO * SIZE)]
+        dict_type = {"assignments": list(assignments.values("assign_file", "course", "course_id", "date", "due_date", "id", "teacher", "teacher_id"))}
+    return JsonResponse(dict_type)
+
+def api_posts(request,PAGENO,SIZE): # pagination for post
+    if request.method == "GET":
+        skip = SIZE * (PAGENO -1)
+        posts = Post.objects.all() [skip:(PAGENO * SIZE)]
+        dict_type = {"posts": list(posts.values("title", "content", "course", "date_posted"))}
+    return JsonResponse(dict_type)

@@ -27,8 +27,7 @@ urlpatterns = [
     path('edit/<int:id>', views.edit),  
     path('update/<int:id>', views.update),  
     path('delete/<int:id>', views.delete), 
-    path('api/assignments/<int:PAGENO>/<int:SIZE>', views.api_assignments, name="api_assignments_data"), 
-    path('api/posts/<int:PAGENO>/<int:SIZE>', views.api_posts, name="api_posts_data"), 
+     
 ]
 
 if settings.DEBUG:
