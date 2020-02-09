@@ -4,10 +4,12 @@
 
   {% block content_header %}
     <h2>Assignments</h2>
+    {% if user.is_authenticated and request.user.groups.all.0.name == 'Teacher' %}
     <p>
       <a href="{% url 'main:upload_assignment' %}
       " class="btn btn-primary">Upload Assignment</a>
     </p>
+    {% endif %}
   {% endblock %}
 
 <form method ="get" class = "search-bar">
@@ -21,9 +23,12 @@
       <tr>
         <th>Course</th>
         <th>Teacher</th>
+        <th>Date Uploaded</th>
         <th>Due Date</th>
         <th>Download</th>
+      {% if user.is_authenticated and request.user == f.teacher.user %}
         <th>Delete</th>
+      {% endif %}
       </tr>
     </thead>
     {% if assignments %}
@@ -32,18 +37,21 @@
         <tr>
           <td>{{ f.course }}</td>
           <td>{{ f.teacher }}</td>
+          <td>{{ f.date }}</td>
           <td>{{ f.due_date }}</td>
           <td>
             <a href="{{ f.assign_file.url }}" class="btn btn-primary btn-sm" target="_blank">
               Download File
             </a>
           </td>
+          {% if user.is_authenticated and request.user == f.teacher.user %}
           <td>
           <form method="post" action="{% url 'main:delete_assignment' f.pk %}">
               {% csrf_token %}
               <button type="submit" class="btn btn-danger btn-sm">Delete</button>
             </form>
           </td>
+          {% endif %}
         </tr>
       {% endfor %}
     </tbody>

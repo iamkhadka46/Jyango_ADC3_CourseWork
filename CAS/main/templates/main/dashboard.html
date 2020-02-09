@@ -13,7 +13,7 @@
           
         </div>
         <div class="card-action">
-          <a href="{% url 'post:post-home' %}">Visit</a>
+          <a href="{% url 'post:post-home' %}">Posts</a>
           
         </div>
       </div>
@@ -22,18 +22,6 @@
   </div>
   
   {% endblock %}
-
-
-
-    {{variable}}
-
-    {% for c in Courses %}
-
-    {{c.course_title}}
-    {{c.course_tutor}}
-    {{c.date}}
-
-    {% endfor %}
 </body>
 </html>
 

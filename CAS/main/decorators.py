@@ -22,7 +22,7 @@ def admin_only(view_func):
         elif group == "Teacher":
             return redirect("main:dashboard")
         elif group == "Student":
-            return redirect("main:dashboard")
+            return HttpResponse('You do not have administrative privilages!')
 
     return wrapper_func
 

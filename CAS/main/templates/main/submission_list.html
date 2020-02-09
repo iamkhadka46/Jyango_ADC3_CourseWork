@@ -4,15 +4,17 @@
 
   {% block content_header %}
     <h2>Submissions</h2>
+    {% if user.is_authenticated and request.user.groups.all.0.name == 'Student' %}
     <p>
       <a href="{% url 'main:upload_submission' %}
       " class="btn btn-primary">Upload your Submission</a>
     </p>
+    {% endif %}
   {% endblock %}
 
 <form method ="get" class = "search-bar">
 
-<input type= "text" name = 'q' placeholder = "Search.."  value='{{query}}'>
+<input type= "text" name = 's' placeholder = "Search.."  value='{{queryy}}'>
 
 </form>
 
@@ -24,7 +26,9 @@
         <th>Teacher</th>
         <th>Date Submitted</th>
         <th>Download</th>
+        {% if user.is_authenticated and request.user == f.student.user %}
         <th>Delete</th>
+        {% endif %}
       </tr>
     </thead>
     {% if submissions %}
@@ -40,12 +44,14 @@
               Download File
             </a>
           </td>
+          {% if user.is_authenticated and request.user == f.student.user %}
           <td>
-          <form method="post" action="{% url 'main:delete_submission' f.pk %}">
+          <form method="post" action="{% url 'main:delete_assignment' f.pk %}">
               {% csrf_token %}
               <button type="submit" class="btn btn-danger btn-sm">Delete</button>
             </form>
           </td>
+          {% endif %}
         </tr>
       {% endfor %}
     </tbody>

@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from . forms import *
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages #to display messages in admin panel
-from .models import Course, User, UploadFile, Assignment, Post
+from .models import *
 from django.contrib.auth import get_user_model
 from django.views.generic import TemplateView, ListView
 from django.db.models import Q
@@ -66,14 +66,6 @@ def dashboard(request):
     return render(request = request, template_name = 'main/dashboard.html', context={"courses": Course.objects.all})
 
 
-def home(request):
-    if request.user.is_authenticated:
-        if request.user.is_teacher:# yet to implement
-            return redirect('dashboard/')
-        else:
-            return redirect('login/')
-    return render(request, 'main/home.html')
-
 def search(request):
     user_list = User.objects.all()
     user_filter = UserFilter(request.GET, queryset=user_list) #using django filter plugin
@@ -89,20 +81,6 @@ def assignment_list(request):
         'assignments': assignments
     })
 
-def api_assignments(request,PAGENO,SIZE): # pagination for assignment
-    if request.method == "GET":
-        skip = SIZE * (PAGENO -1)
-        assignments = Assignment.objects.all() [skip:(PAGENO * SIZE)]
-        dict_type = {"assignments": list(assignments.values("assign_file", "course", "course_id", "date", "due_date", "id", "teacher", "teacher_id"))}
-    return JsonResponse(dict_type)
-
-def api_posts(request,PAGENO,SIZE): # pagination for post
-    if request.method == "GET":
-        skip = SIZE * (PAGENO -1)
-        posts = Post.objects.all() [skip:(PAGENO * SIZE)]
-        dict_type = {"posts": list(posts.values("title", "content", "course", "date_posted"))}
-    return JsonResponse(dict_type)
-
 def get_data_queryset(query = None):
     queryset = []
     queries = query.split(" ")
@@ -114,8 +92,22 @@ def get_data_queryset(query = None):
 
         for assignment in assignments:
             queryset.append(assignment) #using append to store the query
-
     return list(set(queryset))
+
+def get_data_queryset1(query = None):
+    queryset1 = []
+    queries1 = query.split(" ")
+    for s in queries1:
+        submissions = Submission.objects.filter(
+            Q(course__course_title__icontains=s) |
+            Q(teacher__user__first_name__icontains=s) |
+            Q(student__user__first_name__icontains=s)  #using 'or' to add course to the query
+        )
+
+        for submission in submissions:
+            queryset1.append(submission) #using append to store the query
+
+    return list(set(queryset1))
 
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['Teacher'])
@@ -141,10 +133,18 @@ def delete_assignment(request, pk): #calling object by primary key.(slug method)
 
 def submission_list(request):
     submissions = Submission.objects.all()
+    if request.GET:
+        queryy = request.GET['s'] #for search query
+        submissions = get_data_queryset1(str(queryy)) 
     return render(request, 'main/submission_list.html', {
         'submissions': submissions
     })
 
+def grades(request):
+    grades = Grade.objects.all()
+    return render(request, 'main/grades.html', {
+        'grades': grades
+    })
 
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['Student'])
@@ -212,6 +212,18 @@ def delete(request, id):
     course.delete()  
     return redirect("/show")  
 
-
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['Teacher'])
+def upload_grades(request):
+    if request.method == 'POST':
+        form = GradeForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('main:grades')
+    else:
+        form = GradeForm()
+    return render(request, 'main/upload_grades.html', {
+        'form': form
+    })
 #@login_required(login_url='login')
 #@allowed_users(allowed_roles=['Teacher']

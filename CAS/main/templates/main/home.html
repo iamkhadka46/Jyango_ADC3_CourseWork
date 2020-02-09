@@ -28,22 +28,36 @@
           </a>
           <ul class="right hide-on-med-and-down">
             <li><a href="/">Home</a></li>
-        {% if user.is_authenticated %}
+        {% if user.is_authenticated and request.user.groups.all.0.name == 'Teacher' %}
                 <li><a href="{% url 'post:post-home' %}">Posts</a></li>
-                <li><a href="{% url 'post:post-create' %}">New Post</a></li>
+                <li><a href="{% url 'post:post-create' %}">Create Post</a></li>
                 <li><a href="/dashboard">Courses</a></li>
-                
-                <li><a href="/search">Search User</a></li>
-                <li><a href="/show">Add Courses</a></li>
-                <li><a href="/assignments">Add Assignment</a></li>
+                <li><a href="/assignments">Assignments</a></li>
+                <li><a href="/submissions">Submissions</a></li>
+                <li><a href="/grades">Grades</a></li>
                 <li><a href="{% url 'main:logout' %}">Log Out</a></li>
-                
-              
+                     
+        {% elif user.is_authenticated and request.user.groups.all.0.name == 'Student' %}
+                <li><a href="{% url 'post:post-home' %}">Posts</a></li>
+                <li><a href="/dashboard">Courses</a></li>
+                <li><a href="/assignments">Assignments</a></li>
+                <li><a href="/submissions">Submissions</a></li>
+                <li><a href="/grades">Grades</a></li>
+                <li><a href="{% url 'main:logout' %}">Log Out</a></li>
+
+        {% elif user.is_authenticated and request.user.groups.all.0.name == 'admin'  %} 
+                <li><a href="{% url 'post:post-home' %}">Posts</a></li>
+                <li><a href="{% url 'post:post-create' %}">Create Post</a></li>
+                <li><a href="/search">Search User</a></li>
+                <li><a href="/dashboard">Courses</a></li>
+                <li><a href="/show">Add Courses</a></li>
+                <li><a href="/assignments">Assignments</a></li>
+                <li><a href="/submissions">Submissions</a></li>
+                <li><a href="{% url 'main:logout' %}">Log Out</a></li>
         {% else %}
-           
                 <li><a href="/login">Login</a></li>
                 <li><a href="/signup">Register</a></li>
-                 {% endif %}
+        {% endif %}
         <li>
           <a href="https://heraldcollege.edu.np/">Herald</a>
         </li>

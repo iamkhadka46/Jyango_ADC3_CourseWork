@@ -1,0 +1,49 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+
+  {% block content_header %}
+    <h2>Grades</h2>
+    {% if user.is_authenticated and request.user.groups.all.0.name == 'Teacher' %}
+    <p>
+      <a href="{% url 'main:upload_grades' %}
+      " class="btn btn-primary">Upload Grades</a>
+    </p>
+    {% endif %}
+  {% endblock %}
+
+
+
+  <table class="table mb-0">
+    <thead>
+      <tr>
+        <th>Student</th>
+        <th>Course</th>
+        <th>Teacher</th>
+        <th>Grade</th>
+        {% if user.is_authenticated and request.user == f.student.user %}
+        <th>Submission</th>
+        {% endif %}
+      </tr>
+    </thead>
+    {% if grades %}
+    <tbody>
+      {% for grade in grades %}
+        <tr>
+          <td>{{ grade.student }}</td>
+          <td>{{ grade.course }}</td>
+          <td>{{ grade.teacher }}</td>
+          <td>{{ grade.grade }}</td>
+          {% if user.is_authenticated and request.user == f.student.user %}
+          <td>
+            <a href="{{ grade.submission.sub_file.url }}" class="btn btn-primary btn-sm" target="_blank">
+              Submitted File
+            </a>
+          </td>
+          {% endif %}
+        </tr>
+      {% endfor %}
+    </tbody>
+    {% endif %}
+  </table>
+{% endblock %}

@@ -60,13 +60,19 @@ class Submission(models.Model):
     student = models.ForeignKey(Student, on_delete = models.CASCADE)
     teacher = models.ForeignKey(Teacher, on_delete = models.CASCADE, null = True)
 
-    def __str__(self):
-        return self.post.title
+    
 
 class UploadFile(models.Model):
     title = models.CharField(max_length=100)
     courses = models.CharField(max_length=100)
     file = models.FileField(upload_to='FilesUpload/')
+
+class Grade(models.Model):
+    submission = models.ForeignKey(Submission, on_delete = models.CASCADE, null = True)
+    student = models.ForeignKey(Student, on_delete = models.CASCADE, null = True)
+    course = models.ForeignKey(Course, on_delete = models.CASCADE, null = True)
+    teacher = models.ForeignKey(Teacher, on_delete = models.CASCADE, null = True)
+    grade = models.CharField(max_length = 100)
 
 
 
