@@ -131,6 +131,14 @@ def delete_assignment(request, pk): #calling object by primary key.(slug method)
         assignment.delete()
     return redirect('main:assignment_list')
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['Teacher'])
+def delete_grade(request, pk): #calling object by primary key.(slug method)
+    if request.method == 'POST':
+        grade = Grade.objects.get(pk=pk)
+        grade.delete()
+    return redirect('main:grades')
+
 def submission_list(request):
     submissions = Submission.objects.all()
     if request.GET:

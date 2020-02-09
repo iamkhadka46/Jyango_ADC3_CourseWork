@@ -29,6 +29,7 @@ urlpatterns = [
     path('delete/<int:id>', views.delete), 
     path('grades/', views.grades, name = "grades"),
     path('grades/upload/', views.upload_grades, name = "upload_grades"),
+    path('grades/<int:pk>/', views.delete_grade, name='delete_grade'),
 ]
 
 if settings.DEBUG:
