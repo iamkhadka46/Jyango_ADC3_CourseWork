@@ -26,12 +26,9 @@
         <th>Teacher</th>
         <th>Date Submitted</th>
         <th>Download</th>
-        {% if user.is_authenticated and request.user == f.student.user %}
         <th>Delete</th>
-        {% endif %}
       </tr>
     </thead>
-    {% if submissions %}
     <tbody>
       {% for f in submissions %}
         <tr>
@@ -55,6 +52,5 @@
         </tr>
       {% endfor %}
     </tbody>
-    {% endif %}
   </table>
 {% endblock %}

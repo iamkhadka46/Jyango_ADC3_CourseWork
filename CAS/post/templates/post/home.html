@@ -3,7 +3,7 @@
 </br>
 {% block content %}
  </br>
-
+{% if user.is_authenticated and request.user.groups.all.0.name == 'Teacher' %}
 <a href="{% url 'post:post-create' %}" class="btn btn-primary btn-sm" target="">
               Create New Post
             </a>
@@ -14,7 +14,7 @@
             </a>
             </br>
              </br>
-              
+{% endif %}              
     {% for post in posts %}
         <article class="media content-section">
           

@@ -21,9 +21,7 @@
         <th>Course</th>
         <th>Teacher</th>
         <th>Grade</th>
-        {% if user.is_authenticated and request.user == f.student.user %}
         <th>Submission</th>
-        {% endif %}
       </tr>
     </thead>
     {% if grades %}
@@ -34,7 +32,7 @@
           <td>{{ grade.course }}</td>
           <td>{{ grade.teacher }}</td>
           <td>{{ grade.grade }}</td>
-          {% if user.is_authenticated and request.user == f.student.user %}
+          {% if user.is_authenticated and request.user == grade.student.user %}
           <td>
             <a href="{{ grade.submission.sub_file.url }}" class="btn btn-primary btn-sm" target="_blank">
               Submitted File

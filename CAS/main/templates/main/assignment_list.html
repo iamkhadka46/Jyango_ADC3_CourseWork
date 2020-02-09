@@ -26,9 +26,7 @@
         <th>Date Uploaded</th>
         <th>Due Date</th>
         <th>Download</th>
-      {% if user.is_authenticated and request.user == f.teacher.user %}
         <th>Delete</th>
-      {% endif %}
       </tr>
     </thead>
     {% if assignments %}
