@@ -1,9 +1,10 @@
-{% extends 'main/base.html' %}
+{% include 'main/base.html' %}
 
 {% block content %}
 
   {% block content_header %}
     <h2>Grades</h2>
+    </br> </br>
     {% if user.is_authenticated and request.user.groups.all.0.name == 'Teacher' %}
     <p>
       <a href="{% url 'main:upload_grades' %}

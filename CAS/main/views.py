@@ -52,7 +52,7 @@ def login_request(request):
             if user is not None:
                 login(request, user)
                 messages.info(request, f"You are logged in as {username}")
-                return redirect('main:dashboard') #redirect to dashboard/ in urls.py
+                return redirect('post:post-home') #redirect to posts app urls.py
             else:
                 messages.error(request, "Invalid username or password.")
         else:
@@ -233,5 +233,3 @@ def upload_grades(request):
     return render(request, 'main/upload_grades.html', {
         'form': form
     })
-#@login_required(login_url='login')
-#@allowed_users(allowed_roles=['Teacher']

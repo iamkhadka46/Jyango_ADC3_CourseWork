@@ -44,12 +44,12 @@ def update_api_data(request, pk):
 @csrf_exempt
 def create_course(request):
     if request.method == "POST":
-        json_data = request.body.decode('utf-8')
-        create_course = json.loads(json_data)
+        json_data = request.body.decode('utf-8')#convert text to utf-8 formattiing for json
+        create_course = json.loads(json_data) #load data
         course_title = create_course['course_title']
         course_semester = create_course['course_semester']
         date = create_course['date']
-        course = Course.objects.create(course_title=course_title, course_semester = course_semester, date = date)
+        course = Course.objects.create(course_title=course_title, course_semester = course_semester, date = date) #creating course object
         try:
             course.save()
             return JsonResponse({"Success":"Course has been added successfully!"})

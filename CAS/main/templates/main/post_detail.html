@@ -15,13 +15,24 @@
       </div>
       <h2 class="article-title">{{ object.title }}</h2>
       <p class="article-content">{{ object.content }}</p>
+      {% if user.is_authenticated and request.user.groups.all.0.name == 'Teacher' %}
       <tbody>
           <td>
             <a href="/assignments/upload/" class="btn btn-primary btn-sm" target="_blank">
-              Submit Assignment
+              Add Assignment
             </a>
           </td>
     <tbody>
+    {% endif %}
+    {% if user.is_authenticated and request.user.groups.all.0.name == 'Student' %}
+      <tbody>
+          <td>
+            <a href="/submissions/upload/" class="btn btn-primary btn-sm" target="_blank">
+              Add Submission
+            </a>
+          </td>
+    <tbody>
+    {% endif %}
     </div>
   </article>
 
