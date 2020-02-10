@@ -3,7 +3,23 @@ Group Name: Jyango
 Class: ADC3
 Group Members and their contribution:
 Aayam Khadka: CRUD operations with database, Authorization, File upload/download features, Model relationships,
-                Test cases, REST API create, regular updates.
-Atit Raj Kayastha: HTML, Search, Pagination
+              Test cases, REST API create, regular updates.
+Atit Raj Kayastha: HTML, Search, Pagination.
 Pratik Sarkar: Restapi GET, UPDATE, DELETE and bug fixes.
 Rabin Shrestha: Authentication.
+
+
+
+FOR YOUR CONVENIENCE ACCOUNT CREDENTIALS ARE AS FOLLOWS:
+
+STUDENTS:
+username: Ram, Atit, Pratik 
+
+Teachers:
+username: John, Brad
+
+Admin
+username: college
+
+PASSWORD: heraldcollege 
+(for all usernames)
