@@ -2,10 +2,13 @@
 from django.shortcuts import render, redirect
 from main.models import *
 from django.http import HttpResponse,JsonResponse
+from main.decorators import unauthenticated_user, admin_only, allowed_users
+from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 import json
 
-
+@login_required(login_url='login')
+@admin_only  
 @csrf_exempt
 def api_data(request):
     course = Course.objects.all() #calling course object
@@ -14,6 +17,8 @@ def api_data(request):
         return JsonResponse(dict_type)
 
 @csrf_exempt
+@login_required(login_url='login')
+@admin_only  
 def update_api_data(request, pk):
     course = Course.objects.get(pk = pk)
     if request.method == "GET":
@@ -33,6 +38,9 @@ def update_api_data(request, pk):
         course.delete()
         return JsonResponse({"Success":"Course Successfully Deleted!!"})
 
+
+@login_required(login_url='login')
+@admin_only  
 @csrf_exempt
 def create_course(request):
     if request.method == "POST":
@@ -48,6 +56,8 @@ def create_course(request):
         except:
             return JsonResponse({"Error":"Course could not be added!"})
 
+@login_required(login_url='login')
+@admin_only  
 def api_assignments(request,PAGENO,SIZE): # pagination for assignment
     if request.method == "GET":
         skip = SIZE * (PAGENO -1)
@@ -55,6 +65,8 @@ def api_assignments(request,PAGENO,SIZE): # pagination for assignment
         dict_type = {"assignments": list(assignments.values("assign_file", "course", "date", "due_date", "teacher"))}
     return JsonResponse(dict_type)
 
+@login_required(login_url='login')
+@admin_only  
 def api_posts(request,PAGENO,SIZE): # pagination for post
     if request.method == "GET":
         skip = SIZE * (PAGENO -1)
